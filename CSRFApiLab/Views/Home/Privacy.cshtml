@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+@* <h1>@ViewData["Title"]</h1>
+
+<p>Use this page to detail your site's privacy policy.</p> *@
+<h1>API CSRF</h1>
+<div>
+    <input type="text" id="nameAPI" />
+    <input type="button" id="btnAPI" value="submit" />
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+        
+        $('#btnAPI').on("click",
+            function () {
+                // 在發送POST請求時，包含防範標記在Header中
+                const csrfToken = localStorage.getItem('csrfToken');
+
+                fetch('/api/HomeApi/ApiCSRF', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken // 使用後端伺服器自定義Header名稱
+                    },
+                    body: JSON.stringify(nameAPI.value)
+                })
+                    .then(response => {
+                        // 處理伺服器回應
+                    })
+                    .catch(error => {
+                        console.error('Request failed: ', error);
+                    });
+            }
+        );
+
+    });
+
+
+</script>

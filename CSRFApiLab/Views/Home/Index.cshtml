@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<script>
+    function getCookieValue(cookieName) {
+        // 獲取所有 cookie 資訊
+        var allCookies = document.cookie;
+
+        // 將 cookie 字串分割成陣列，每個元素是一個 cookie
+        var cookieArray = allCookies.split("; ");
+
+        // 遍歷 cookie 陣列，尋找指定名稱的 cookie
+        for (var i = 0; i < cookieArray.length; i++) {
+            var cookie = cookieArray[i];
+
+            // 分割 cookie 名稱和值
+            var cookieParts = cookie.split("=");
+            var name = cookieParts[0];
+            var value = cookieParts[1];
+
+            // 如果找到指定名稱的 cookie，返回其值
+            if (name === cookieName) {
+                return decodeURIComponent(value); // 解碼 cookie 值
+            }
+        }
+
+        // 如果找不到指定名稱的 cookie，返回 null 或其他適當的值
+        return null;
+    }
+</script>
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>首頁從cookie取得csrf Token後，存到localStorage.</p>
+</div>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+        // 從 Cookie 取得 token
+        let csrfToken = getCookieValue("XSRF-TOKEN");
+        // 將防範標記存儲在本地存儲體中
+        localStorage.setItem('csrfToken', csrfToken);
+        // 刪除 Cookie，設定一個已經過期的 expires 時間
+        document.cookie = 'XSRF-TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    });
+
+</script>
